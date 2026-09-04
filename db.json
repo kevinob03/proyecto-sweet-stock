@@ -13,7 +13,7 @@
       "id": 2,
       "nombre": "Cupcakes de Vainilla",
       "descripcion": "Docena de cupcakes de vainilla con frosting",
-      "precio": 18.50,
+      "precio": 18.5,
       "stock": 25,
       "categoriaId": 1,
       "imagen": ""
@@ -22,7 +22,7 @@
       "id": 3,
       "nombre": "Torta Red Velvet",
       "descripcion": "Torta red velvet con frosting de queso crema",
-      "precio": 32.00,
+      "precio": 32,
       "stock": 10,
       "categoriaId": 1,
       "imagen": ""
@@ -40,16 +40,16 @@
       "id": 5,
       "nombre": "Brownies",
       "descripcion": "Brownies de chocolate belga (unidad)",
-      "precio": 4.50,
+      "precio": 4.5,
       "stock": 50,
       "categoriaId": 2,
       "imagen": ""
     },
-     {
-      "id": 5,
+    {
+      "id": 6,
       "nombre": "Brownies",
       "descripcion": "Brownies de chocolate blanco (unidad)",
-      "precio": 4.50,
+      "precio": 4.5,
       "stock": 0,
       "categoriaId": 2,
       "imagen": ""
@@ -88,8 +88,65 @@
       "rol": "user"
     }
   ],
-
-  "pedidos":[]
+  "pedidos": [
+    {
+      "usuarioId": 2,
+      "cliente": "Usuario 1",
+      "direccionEntrega": "barranca",
+      "contacto": "26602020",
+      "metodoPago": "Transferencia",
+      "estadoPago": "Pendiente",
+      "productos": [
+        {
+          "productoId": 1,
+          "nombre": "Pastel de Chocolate",
+          "cantidad": 1,
+          "precio": 25.99,
+          "subtotal": 25.99
+        }
+      ],
+      "subtotal": 25.99,
+      "impuestos": 0,
+      "descuento": 0,
+      "total": 25.99,
+      "estado": "En tránsito",
+      "fecha": "2026-09-04T20:31:10.501Z",
+      "tracking": {
+        "express": {
+          "nombre": "Arsenio Romero",
+          "placa": "007",
+          "vehiculo": "yz miedo",
+          "marca": "freedom",
+          "calificacion": 0.4
+        },
+        "origen": {
+          "lat": 9.981469,
+          "lng": -84.757111,
+          "nombre": "Mi ubicación actual como origen"
+        },
+        "destino": {
+          "lat": 9.980672,
+          "lng": -84.736019,
+          "nombre": "El Roble, Puntarenas, 60115, Costa Rica"
+        },
+        "ubicacionActual": {
+          "lat": 9.981359,
+          "lng": -84.757284,
+          "nombre": "Ubicación en vivo del dispositivo",
+          "precision": 35,
+          "actualizadaEn": "2026-09-04T20:58:31.493Z"
+        },
+        "ruta": []
+      },
+      "id": 1
+    }
+  ],
+  "businessInfo": {
+    "nombre": "Sweet Stock",
+    "horario": "Lunes a sábado, de 9:00 a. m. a 6:00 p. m.",
+    "ubicacion": "Consulta la dirección exacta con el personal del local.",
+    "direccion": "",
+    "contacto": "",
+    "identificacionFiscal": ""
+  }
 }
-
-  

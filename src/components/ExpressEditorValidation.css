@@ -1,0 +1,4 @@
+.field-error { color: #a63838; font-size: 0.75rem; font-weight: 600; }
+.express-editor input[aria-invalid="true"] { border-color: #b43d3d; box-shadow: 0 0 0 2px rgba(180, 61, 61, 0.1); }
+.location-validation { margin-top: 0.65rem; color: #a63838; font-size: 0.8rem; font-weight: 600; }
+.location-validation p { margin: 0.25rem 0; }

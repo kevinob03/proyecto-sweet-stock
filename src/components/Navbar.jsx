@@ -2,14 +2,18 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Navbar.css";
 import logo from "../assets/sweetstock-logo.png";
+import ConfirmModal from "./ConfirmModal";
+import { useState } from "react";
 
 function Navbar() {
+  const [confirmLogout, setConfirmLogout] = useState(false);
   const { usuario, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
+    setConfirmLogout(false);
     navigate("/login");
   };
 
@@ -18,7 +22,7 @@ function Navbar() {
   }
 
   return (
-    <nav className="navbar">
+    <><nav className="navbar">
       <div className="navbar-container">
 
         <Link to="/inicio" className="navbar-brand">
@@ -97,14 +101,14 @@ function Navbar() {
           <button
             type="button"
             className="navbar-logout"
-            onClick={handleLogout}
+            onClick={() => setConfirmLogout(true)}
           >
             Cerrar sesión
           </button>
         </div>
 
       </div>
-    </nav>
+    </nav><ConfirmModal open={confirmLogout} title="¿Deseas cerrar sesión?" message="Se limpiarán los datos de tu sesión y volverás al inicio de sesión." confirmText="Cerrar sesión" type="warning" onCancel={() => setConfirmLogout(false)} onConfirm={handleLogout}/></>
   );
 }
 
