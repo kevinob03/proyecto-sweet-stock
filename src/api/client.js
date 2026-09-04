@@ -56,11 +56,17 @@ export const api = {
     return res.json();
   },
 
-  login: async (email, password) => {
-    const res = await fetch(
-      `${API_URL}/usuarios?email=${email}&password=${password}`
-    );
-    const data = await res.json();
-    return data[0] || null;
-  },
+login: async (email, password) => {
+  const res = await fetch(
+    `${API_URL}/usuarios?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+  );
+
+  if (!res.ok) {
+    throw new Error("Error al consultar los usuarios");
+  }
+
+  const data = await res.json();
+
+  return data[0] || null;
+},
 };

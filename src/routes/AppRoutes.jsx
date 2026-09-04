@@ -8,9 +8,9 @@ import Categorias from "../pages/Categorias/Categorias";
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Login />} />
 
-      <Route path="/" element={<Home />} />
+      <Route path="/inicio" element={<Home />} />
 
       <Route path="/productos" element={<Productos />} />
 
