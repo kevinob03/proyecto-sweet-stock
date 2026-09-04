@@ -2,21 +2,32 @@ import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
+const USUARIO_STORAGE_KEY = "sweetStockUser";
+const TOKEN_STORAGE_KEY = "sweetStockToken";
+
+function leerUsuarioDeStorage() {
+  const valor = localStorage.getItem(USUARIO_STORAGE_KEY);
+  if (!valor) return null;
+  try {
+    return JSON.parse(valor);
+  } catch {
+    return null;
+  }
+}
+
 export function AuthProvider({ children }) {
-  const [usuario, setUsuario] = useState(() => {
-    try { return JSON.parse(localStorage.getItem("sweetStockUser")); } catch { return null; }
-  });
+  const [usuario, setUsuario] = useState(leerUsuarioDeStorage);
 
   const login = (usuario, token) => {
     setUsuario(usuario);
-    localStorage.setItem("sweetStockUser", JSON.stringify(usuario));
-    localStorage.setItem("sweetStockToken", token);
+    localStorage.setItem(USUARIO_STORAGE_KEY, JSON.stringify(usuario));
+    localStorage.setItem(TOKEN_STORAGE_KEY, token);
   };
 
   const logout = () => {
     setUsuario(null);
-    localStorage.removeItem("sweetStockUser");
-    localStorage.removeItem("sweetStockToken");
+    localStorage.removeItem(USUARIO_STORAGE_KEY);
+    localStorage.removeItem(TOKEN_STORAGE_KEY);
     sessionStorage.clear();
   };
 

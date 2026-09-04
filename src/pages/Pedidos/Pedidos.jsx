@@ -2,7 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useAuth } from "../../context/AuthContext";
 import { getProductos } from "../../services/productoService";
-import { createPedido, deletePedido, getPedidoById, getPedidos, updatePedido } from "../../services/pedidoService";
+import {
+  createPedido,
+  deletePedido,
+  getPedidoById,
+  getPedidos,
+  getPedidosByUsuario,
+  updatePedido,
+} from "../../services/pedidoService";
 import ConfirmModal from "../../components/ConfirmModal";
 import OrderTracking from "../../components/OrderTracking";
 import OrderInvoice from "../../components/OrderInvoice";
@@ -11,51 +18,499 @@ import "./Pedidos.css";
 import "./PedidosExtras.css";
 
 const STATUSES = ["Por tomar", "En preparación", "En tránsito", "Despachado"];
-const emptyForm = { cliente: "", usuarioId: "", direccionEntrega: "", contacto: "", metodoPago: "Pendiente", estado: STATUSES[0], productos: [] };
-const money = (value) => new Intl.NumberFormat("es-CR", { style: "currency", currency: "CRC" }).format(value || 0);
+const emptyForm = {
+  cliente: "",
+  usuarioId: "",
+  direccionEntrega: "",
+  contacto: "",
+  metodoPago: "Pendiente",
+  estado: STATUSES[0],
+  productos: [],
+};
+const money = (value) =>
+  new Intl.NumberFormat("es-CR", { style: "currency", currency: "CRC" }).format(value || 0);
 
 function Pedidos() {
   const { usuario } = useAuth();
   const isAdmin = usuario?.rol === "admin";
-  const [orders, setOrders] = useState([]), [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true), [busy, setBusy] = useState(false);
-  const [error, setError] = useState(""), [notice, setNotice] = useState("");
-  const [filter, setFilter] = useState("Todos"), [search, setSearch] = useState("");
-  const [formOpen, setFormOpen] = useState(false), [editing, setEditing] = useState(null);
-  const [form, setForm] = useState(emptyForm), [confirm, setConfirm] = useState(null), [detail, setDetail] = useState(null);
-  const [trackingOrder, setTrackingOrder] = useState(null), [invoiceOrder, setInvoiceOrder] = useState(null);
+
+  const [orders, setOrders] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [filter, setFilter] = useState("Todos");
+  const [search, setSearch] = useState("");
+  const [formOpen, setFormOpen] = useState(false);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(emptyForm);
+  const [confirm, setConfirm] = useState(null);
+  const [detail, setDetail] = useState(null);
+  const [trackingOrder, setTrackingOrder] = useState(null);
+  const [invoiceOrder, setInvoiceOrder] = useState(null);
   const [expressOrder, setExpressOrder] = useState(null);
-  const load = async () => { setLoading(true); setError(""); try { const [a,b] = await Promise.all([getPedidos(), getProductos()]); setOrders(a); setProducts(b); } catch { setError("No se pudieron cargar los pedidos."); } finally { setLoading(false); } };
+
+  const load = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const [orderData, productData] = await Promise.all([
+        isAdmin ? getPedidos() : getPedidosByUsuario(usuario.id),
+        getProductos(),
+      ]);
+      setOrders(orderData);
+      setProducts(productData);
+    } catch {
+      setError("No se pudieron cargar los pedidos.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    Promise.all([getPedidos(), getProductos()])
-      .then(([orderData, productData]) => { setOrders(orderData); setProducts(productData); })
-      .catch(() => setError("No se pudieron cargar los pedidos."))
-      .finally(() => setLoading(false));
-  }, []);
-  useEffect(() => { if (notice) { const timer = setTimeout(() => setNotice(""), 3500); return () => clearTimeout(timer); } }, [notice]);
-  const counts = useMemo(() => STATUSES.map((estado) => ({ estado, cantidad: orders.filter((o) => o.estado === estado).length })), [orders]);
-  const visible = useMemo(() => orders.filter((o) => (filter === "Todos" || o.estado === filter) && [o.id,o.cliente,o.fecha,o.estado,...(o.productos||[]).map((p)=>p.nombre)].join(" ").toLowerCase().includes(search.toLowerCase().trim())), [orders,filter,search]);
-  const total = form.productos.reduce((sum,line) => sum + (products.find((p)=>String(p.id)===String(line.productoId))?.precio||0)*Number(line.cantidad||0), 0);
-  const openCreate=()=>{setEditing(null);setForm({...emptyForm,cliente:isAdmin?"":usuario.nombre,usuarioId:usuario.id,productos:products[0]?[{productoId:products[0].id,cantidad:1}]:[]});setFormOpen(true);};
-  const openEdit=(o)=>{setEditing(o);setForm({cliente:o.cliente,usuarioId:o.usuarioId,direccionEntrega:o.direccionEntrega||"",contacto:o.contacto||"",metodoPago:o.metodoPago||"Pendiente",estado:o.estado,tracking:o.tracking||null,productos:o.productos.map((p)=>({productoId:p.productoId,cantidad:p.cantidad}))});setFormOpen(true);};
-  const addLine=()=>{if(products[0])setForm((v)=>({...v,productos:[...v.productos,{productoId:products[0].id,cantidad:1}]}));};
-  const updateLine=(i,key,value)=>setForm((v)=>({...v,productos:v.productos.map((line,n)=>n===i?{...line,[key]:value}:line)}));
-  const askSave=(e)=>{e.preventDefault();const details=`Cliente: ${form.cliente}\nEntrega: ${form.direccionEntrega}\nContacto: ${form.contacto}\nProductos: ${form.productos.map((line)=>`${line.cantidad} × ${products.find((p)=>String(p.id)===String(line.productoId))?.nombre}`).join(", ")}\nTotal: ${money(total)}\nEstado: ${form.estado}`;setConfirm({title:editing?"¿Deseas guardar los cambios realizados?":"¿Deseas crear este pedido?",message:editing?`Pedido #${editing.id}: revisa los nuevos datos antes de guardarlos.`:"Revisa el resumen antes de continuar.",details,confirmText:editing?"Guardar cambios":"Confirmar pedido",type:editing?"warning":"success",action:"save"});};
-  const perform=async()=>{const action=confirm?.action;setBusy(true);setError("");try{if(action==="save"){if(editing)await updatePedido(editing.id,form);else await createPedido(form);setNotice(editing?"Pedido actualizado correctamente.":"Pedido creado correctamente.");setFormOpen(false);}if(action==="delete"){await deletePedido(confirm.order.id);setNotice("Pedido eliminado correctamente.");}if(action==="view")setDetail(await getPedidoById(confirm.order.id));if(action==="advance"){await updatePedido(confirm.order.id,{estado:confirm.next});setNotice(confirm.next==="En preparación"?"Pedido aceptado y enviado a preparación.":"Pedido marcado en tránsito.");}setConfirm(null);await load();}catch{setError("No se pudo realizar la operación.");}finally{setBusy(false);}};
-  const nextStatus=(order)=>order.estado==="Por tomar"?"En preparación":order.estado==="En preparación"?"En tránsito":null;
-  const askAdvance=(order)=>{const next=nextStatus(order);if(!next)return;setConfirm({title:next==="En preparación"?"¿Deseas aceptar este pedido?":"¿El pedido ya salió en el express?",message:`El estado cambiará de ${order.estado} a ${next}.`,confirmText:next==="En preparación"?"Aceptar pedido":"Marcar en tránsito",type:"warning",action:"advance",order,next});};
-  return <main className="pedidos-page">
-    <section className="pedidos-header"><div><h1>Pedidos</h1><p>{isAdmin?"Gestiona y supervisa todos los pedidos.":"Realiza y consulta únicamente tus pedidos."}</p></div><button className="order-create" onClick={openCreate}>Realizar pedido</button></section>
-    {notice&&<div className="toast" role="status">{notice}</div>}{error&&<p className="orders-error" role="alert">{error}</p>}
-    {isAdmin&&<><section className="status-grid">{counts.map(({estado,cantidad})=><article className="status-card" key={estado}><span>{estado==="Despachado"?"Despachados":estado}</span><strong>{cantidad}</strong></article>)}</section><section className="chart-card"><h2>Pedidos por estado</h2><div className="chart-wrap"><ResponsiveContainer width="100%" height="100%"><BarChart data={counts}><CartesianGrid strokeDasharray="3 3" vertical={false}/><XAxis dataKey="estado"/><YAxis allowDecimals={false}/><Tooltip/><Bar dataKey="cantidad" fill="#c9795d" radius={[7,7,0,0]}/></BarChart></ResponsiveContainer></div></section></>}
-    <section className="orders-card"><div className="orders-tools"><div className="filters">{["Todos",...STATUSES].map((item)=><button className={filter===item?"active":""} onClick={()=>setFilter(item)} key={item}>{item}</button>)}</div><input aria-label="Buscar pedidos" placeholder="Buscar por ID, cliente, producto, fecha..." value={search} onChange={(e)=>setSearch(e.target.value)}/></div>
-    {loading?<p className="orders-state">Cargando pedidos...</p>:visible.length===0?<p className="orders-state">No hay pedidos que coincidan.</p>:<div className="table-scroll"><table><thead><tr><th>ID</th><th>Cliente</th><th>Productos</th><th>Total</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>{visible.map((o)=>{const editable=isAdmin||o.estado==="Por tomar",next=nextStatus(o);return <tr key={o.id}><td>#{o.id}</td><td>{o.cliente}</td><td>{o.productos?.map((p)=>`${p.cantidad}× ${p.nombre}`).join(", ")}</td><td>{money(o.total)}</td><td>{new Date(o.fecha).toLocaleDateString("es-CR")}</td><td><span className="status">{o.estado}</span></td><td><div className="row-actions"><button onClick={()=>setConfirm({title:"¿Deseas consultar los detalles completos de este pedido?",message:`Pedido #${o.id}`,confirmText:"Continuar",action:"view",order:o})}>Ver</button><button onClick={()=>setTrackingOrder(o)}>Seguimiento</button>{!isAdmin&&<button onClick={()=>setInvoiceOrder(o)}>Factura</button>}{isAdmin&&next&&<button className="advance-action" onClick={()=>askAdvance(o)}>{next==="En preparación"?"Aceptar":"En tránsito"}</button>}{isAdmin&&<button onClick={()=>setExpressOrder(o)}>Configurar express</button>}<button onClick={()=>openEdit(o)} disabled={!editable} title={!editable?"Solo puede editarse mientras está Por tomar":""}>Editar</button><button disabled={!editable} className="danger-link" title={!editable?"Solo puede cancelarse mientras está Por tomar":""} onClick={()=>setConfirm({title:isAdmin?"¿Estás seguro de eliminar este pedido?":"¿Deseas cancelar este pedido?",message:"Esta acción no se puede deshacer.",confirmText:isAdmin?"Eliminar":"Cancelar pedido",type:"danger",action:"delete",order:o})}>{isAdmin?"Eliminar":"Cancelar"}</button></div></td></tr>})}</tbody></table></div>}</section>
-    {formOpen&&<div className="modal-backdrop"><section className="order-form-modal" role="dialog" aria-modal="true"><h2>{editing?`Editar pedido #${editing.id}`:"Realizar pedido"}</h2><form onSubmit={askSave}>{isAdmin&&<><label>Cliente<input value={form.cliente} onChange={(e)=>setForm({...form,cliente:e.target.value})} required maxLength="80"/></label><label>ID de cliente<input type="number" min="1" value={form.usuarioId} onChange={(e)=>setForm({...form,usuarioId:e.target.value})} required/></label><label>Estado<select value={form.estado} onChange={(e)=>setForm({...form,estado:e.target.value})}>{STATUSES.map((s)=><option key={s}>{s}</option>)}</select></label></>}<label>Dirección de entrega<input value={form.direccionEntrega} onChange={(e)=>setForm({...form,direccionEntrega:e.target.value})} required maxLength="180"/></label><label>Contacto<input value={form.contacto} onChange={(e)=>setForm({...form,contacto:e.target.value})} required maxLength="80"/></label><label>Método de pago<select value={form.metodoPago} onChange={(e)=>setForm({...form,metodoPago:e.target.value})}><option>Pendiente</option><option>Efectivo</option><option>Tarjeta</option><option>Transferencia</option></select></label><div className="product-lines"><div className="line-heading"><strong>Productos</strong><button type="button" onClick={addLine}>Agregar producto</button></div>{form.productos.map((line,i)=><div className="product-line" key={i}><select value={line.productoId} onChange={(e)=>updateLine(i,"productoId",e.target.value)}>{products.map((p)=><option value={p.id} key={`${p.id}-${p.nombre}`}>{p.nombre} — {money(p.precio)}</option>)}</select><input aria-label="Cantidad" type="number" min="1" value={line.cantidad} onChange={(e)=>updateLine(i,"cantidad",e.target.value)}/><button type="button" onClick={()=>setForm((v)=>({...v,productos:v.productos.filter((_,n)=>n!==i)}))}>Quitar</button></div>)}</div><strong className="form-total">Total: {money(total)}</strong><div className="confirm-actions"><button type="button" className="button-secondary" onClick={()=>setFormOpen(false)}>Cancelar</button><button className="button-primary" disabled={!form.productos.length}>{editing?"Revisar cambios":"Revisar pedido"}</button></div></form></section></div>}
-    {detail&&<div className="modal-backdrop"><section className="order-form-modal detail-modal" role="dialog" aria-modal="true"><h2>Pedido #{detail.id}</h2><dl><dt>Cliente</dt><dd>{detail.cliente}</dd><dt>Fecha</dt><dd>{new Date(detail.fecha).toLocaleString("es-CR")}</dd><dt>Estado</dt><dd>{detail.estado}</dd><dt>Productos</dt><dd>{detail.productos.map((p)=><div key={`${p.productoId}-${p.nombre}`}>{p.cantidad} × {p.nombre} — {money(p.subtotal)}</div>)}</dd><dt>Total</dt><dd>{money(detail.total)}</dd></dl><div className="confirm-actions"><button className="button-primary" onClick={()=>setDetail(null)}>Cerrar</button></div></section></div>}
-    <ConfirmModal open={Boolean(confirm)} {...confirm} busy={busy} onCancel={()=>setConfirm(null)} onConfirm={perform}/>
-    {trackingOrder&&<OrderTracking order={trackingOrder} onClose={()=>setTrackingOrder(null)}/>}
-    {invoiceOrder&&<OrderInvoice order={invoiceOrder} onClose={()=>setInvoiceOrder(null)}/>}
-    {expressOrder&&<ExpressEditor order={expressOrder} onClose={()=>setExpressOrder(null)} onSaved={()=>{setNotice("Datos del express actualizados.");load();}}/>}
-  </main>;
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [usuario.id, isAdmin]);
+
+  useEffect(() => {
+    if (notice) {
+      const timer = setTimeout(() => setNotice(""), 3500);
+      return () => clearTimeout(timer);
+    }
+  }, [notice]);
+
+  const counts = useMemo(
+    () =>
+      STATUSES.map((estado) => ({
+        estado,
+        cantidad: orders.filter((o) => o.estado === estado).length,
+      })),
+    [orders]
+  );
+
+  const visible = useMemo(
+    () =>
+      orders.filter(
+        (o) =>
+          (filter === "Todos" || o.estado === filter) &&
+          [o.id, o.cliente, o.fecha, o.estado, ...(o.productos || []).map((p) => p.nombre)]
+            .join(" ")
+            .toLowerCase()
+            .includes(search.toLowerCase().trim())
+      ),
+    [orders, filter, search]
+  );
+
+  const total = form.productos.reduce(
+    (sum, line) =>
+      sum +
+      (products.find((p) => String(p.id) === String(line.productoId))?.precio || 0) *
+        Number(line.cantidad || 0),
+    0
+  );
+
+  const esPropio = (o) => isAdmin || String(o.usuarioId) === String(usuario.id);
+
+  const openCreate = () => {
+    setEditing(null);
+    setForm({
+      ...emptyForm,
+      cliente: isAdmin ? "" : usuario.nombre,
+      usuarioId: usuario.id,
+      productos: products[0] ? [{ productoId: products[0].id, cantidad: 1 }] : [],
+    });
+    setFormOpen(true);
+  };
+
+  const openEdit = (o) => {
+    setEditing(o);
+    setForm({
+      cliente: o.cliente,
+      usuarioId: o.usuarioId,
+      direccionEntrega: o.direccionEntrega || "",
+      contacto: o.contacto || "",
+      metodoPago: o.metodoPago || "Pendiente",
+      estado: o.estado,
+      tracking: o.tracking || null,
+      productos: o.productos.map((p) => ({ productoId: p.productoId, cantidad: p.cantidad })),
+    });
+    setFormOpen(true);
+  };
+
+  const addLine = () => {
+    if (products[0]) setForm((v) => ({ ...v, productos: [...v.productos, { productoId: products[0].id, cantidad: 1 }] }));
+  };
+
+  const updateLine = (i, key, value) =>
+    setForm((v) => ({
+      ...v,
+      productos: v.productos.map((line, n) => (n === i ? { ...line, [key]: value } : line)),
+    }));
+
+  const askSave = (e) => {
+    e.preventDefault();
+    const details = `Cliente: ${form.cliente}\nEntrega: ${form.direccionEntrega}\nContacto: ${form.contacto}\nProductos: ${form.productos
+      .map((line) => `${line.cantidad} × ${products.find((p) => String(p.id) === String(line.productoId))?.nombre}`)
+      .join(", ")}\nTotal: ${money(total)}\nEstado: ${form.estado}`;
+    setConfirm({
+      title: editing ? "¿Deseas guardar los cambios realizados?" : "¿Deseas crear este pedido?",
+      message: editing
+        ? `Pedido #${editing.id}: revisa los nuevos datos antes de guardarlos.`
+        : "Revisa el resumen antes de continuar.",
+      details,
+      confirmText: editing ? "Guardar cambios" : "Confirmar pedido",
+      type: editing ? "warning" : "success",
+      action: "save",
+    });
+  };
+
+  const perform = async () => {
+    const action = confirm?.action;
+    setBusy(true);
+    setError("");
+    try {
+      if (action === "save") {
+        if (editing) await updatePedido(editing.id, form);
+        else await createPedido(form);
+        setNotice(editing ? "Pedido actualizado correctamente." : "Pedido creado correctamente.");
+        setFormOpen(false);
+      }
+      if (action === "delete") {
+        await deletePedido(confirm.order.id);
+        setNotice("Pedido eliminado correctamente.");
+      }
+      if (action === "view") setDetail(await getPedidoById(confirm.order.id));
+      if (action === "advance") {
+        await updatePedido(confirm.order.id, { estado: confirm.next });
+        setNotice(
+          confirm.next === "En preparación"
+            ? "Pedido aceptado y enviado a preparación."
+            : "Pedido marcado en tránsito."
+        );
+      }
+      setConfirm(null);
+      await load();
+    } catch {
+      setError("No se pudo realizar la operación.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const nextStatus = (order) =>
+    order.estado === "Por tomar" ? "En preparación" : order.estado === "En preparación" ? "En tránsito" : null;
+
+  const askAdvance = (order) => {
+    const next = nextStatus(order);
+    if (!next) return;
+    setConfirm({
+      title: next === "En preparación" ? "¿Deseas aceptar este pedido?" : "¿El pedido ya salió en el express?",
+      message: `El estado cambiará de ${order.estado} a ${next}.`,
+      confirmText: next === "En preparación" ? "Aceptar pedido" : "Marcar en tránsito",
+      type: "warning",
+      action: "advance",
+      order,
+      next,
+    });
+  };
+
+  const formatearFecha = (fecha) =>
+    new Date(fecha).toLocaleDateString("es-CR", { day: "numeric", month: "long", year: "numeric" });
+
+  if (loading) return <p className="pedidos-mensaje">Cargando pedidos...</p>;
+  if (error && orders.length === 0) return <p className="pedidos-mensaje pedidos-error">{error}</p>;
+
+  return (
+    <main className="pedidos-page">
+      <section className="pedidos-header">
+        <div>
+          <span className="pedidos-label">{isAdmin ? "GESTIÓN DE PEDIDOS" : "MIS PEDIDOS"}</span>
+          <h1>Pedidos</h1>
+          <p>{isAdmin ? "Gestiona y supervisa todos los pedidos." : "Realiza, edita y consulta únicamente tus pedidos."}</p>
+        </div>
+        <button className="order-create" onClick={openCreate}>
+          Realizar pedido
+        </button>
+      </section>
+
+      {notice && (
+        <div className="toast" role="status">
+          {notice}
+        </div>
+      )}
+      {error && (
+        <p className="orders-error" role="alert">
+          {error}
+        </p>
+      )}
+
+      {isAdmin && (
+        <>
+          <section className="status-grid">
+            {counts.map(({ estado, cantidad }) => (
+              <article className="status-card" key={estado}>
+                <span>{estado === "Despachado" ? "Despachados" : estado}</span>
+                <strong>{cantidad}</strong>
+              </article>
+            ))}
+          </section>
+          <section className="chart-card">
+            <h2>Pedidos por estado</h2>
+            <div className="chart-wrap">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={counts}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="estado" />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="cantidad" fill="#c9795d" radius={[7, 7, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </section>
+        </>
+      )}
+
+      <section className="orders-card">
+        <div className="orders-tools">
+          <div className="filters">
+            {["Todos", ...STATUSES].map((item) => (
+              <button className={filter === item ? "active" : ""} onClick={() => setFilter(item)} key={item}>
+                {item}
+              </button>
+            ))}
+          </div>
+          <input
+            aria-label="Buscar pedidos"
+            placeholder="Buscar por ID, cliente, producto, fecha..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        {visible.length === 0 ? (
+          <div className="pedidos-empty">
+            <h2>No hay pedidos todavía</h2>
+            <p>Agrega un producto desde el catálogo para generar tu primer pedido.</p>
+          </div>
+        ) : (
+          <div className="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Cliente</th>
+                  <th>Productos</th>
+                  <th>Total</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visible.map((o) => {
+                  const editable = esPropio(o) && (isAdmin || o.estado === "Por tomar");
+                  const next = nextStatus(o);
+                  return (
+                    <tr key={o.id}>
+                      <td>#{o.id}</td>
+                      <td>{o.cliente}</td>
+                      <td>{o.productos?.map((p) => `${p.cantidad}× ${p.nombre}`).join(", ")}</td>
+                      <td>{money(o.total)}</td>
+                      <td>{formatearFecha(o.fecha)}</td>
+                      <td>
+                        <span className="status">{o.estado}</span>
+                      </td>
+                      <td>
+                        <div className="row-actions">
+                          <button
+                            onClick={() =>
+                              setConfirm({
+                                title: "¿Deseas consultar los detalles completos de este pedido?",
+                                message: `Pedido #${o.id}`,
+                                confirmText: "Continuar",
+                                action: "view",
+                                order: o,
+                              })
+                            }
+                          >
+                            Ver
+                          </button>
+                          <button onClick={() => setTrackingOrder(o)}>Seguimiento</button>
+                          {!isAdmin && <button onClick={() => setInvoiceOrder(o)}>Factura</button>}
+                          {isAdmin && next && (
+                            <button className="advance-action" onClick={() => askAdvance(o)}>
+                              {next === "En preparación" ? "Aceptar" : "En tránsito"}
+                            </button>
+                          )}
+                          {isAdmin && <button onClick={() => setExpressOrder(o)}>Configurar express</button>}
+                          <button
+                            onClick={() => openEdit(o)}
+                            disabled={!editable}
+                            title={!editable ? "Solo puede editarse mientras está Por tomar" : ""}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            disabled={!editable}
+                            className="danger-link"
+                            title={!editable ? "Solo puede cancelarse mientras está Por tomar" : ""}
+                            onClick={() =>
+                              setConfirm({
+                                title: isAdmin ? "¿Estás seguro de eliminar este pedido?" : "¿Deseas cancelar este pedido?",
+                                message: "Esta acción no se puede deshacer.",
+                                confirmText: isAdmin ? "Eliminar" : "Cancelar pedido",
+                                type: "danger",
+                                action: "delete",
+                                order: o,
+                              })
+                            }
+                          >
+                            {isAdmin ? "Eliminar" : "Cancelar"}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      {formOpen && (
+        <div className="modal-backdrop">
+          <section className="order-form-modal" role="dialog" aria-modal="true">
+            <h2>{editing ? `Editar pedido #${editing.id}` : "Realizar pedido"}</h2>
+            <form onSubmit={askSave}>
+              {isAdmin && (
+                <>
+                  <label>
+                    Cliente
+                    <input value={form.cliente} onChange={(e) => setForm({ ...form, cliente: e.target.value })} required maxLength="80" />
+                  </label>
+                  <label>
+                    ID de cliente
+                    <input type="number" min="1" value={form.usuarioId} onChange={(e) => setForm({ ...form, usuarioId: e.target.value })} required />
+                  </label>
+                  <label>
+                    Estado
+                    <select value={form.estado} onChange={(e) => setForm({ ...form, estado: e.target.value })}>
+                      {STATUSES.map((s) => (
+                        <option key={s}>{s}</option>
+                      ))}
+                    </select>
+                  </label>
+                </>
+              )}
+              <label>
+                Dirección de entrega
+                <input value={form.direccionEntrega} onChange={(e) => setForm({ ...form, direccionEntrega: e.target.value })} required maxLength="180" />
+              </label>
+              <label>
+                Contacto
+                <input value={form.contacto} onChange={(e) => setForm({ ...form, contacto: e.target.value })} required maxLength="80" />
+              </label>
+              <label>
+                Método de pago
+                <select value={form.metodoPago} onChange={(e) => setForm({ ...form, metodoPago: e.target.value })}>
+                  <option>Pendiente</option>
+                  <option>Efectivo</option>
+                  <option>Tarjeta</option>
+                  <option>Transferencia</option>
+                </select>
+              </label>
+              <div className="product-lines">
+                <div className="line-heading">
+                  <strong>Productos</strong>
+                  <button type="button" onClick={addLine}>
+                    Agregar producto
+                  </button>
+                </div>
+                {form.productos.map((line, i) => (
+                  <div className="product-line" key={i}>
+                    <select value={line.productoId} onChange={(e) => updateLine(i, "productoId", e.target.value)}>
+                      {products.map((p) => (
+                        <option value={p.id} key={`${p.id}-${p.nombre}`}>
+                          {p.nombre} — {money(p.precio)}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      aria-label="Cantidad"
+                      type="number"
+                      min="1"
+                      value={line.cantidad}
+                      onChange={(e) => updateLine(i, "cantidad", e.target.value)}
+                    />
+                    <button type="button" onClick={() => setForm((v) => ({ ...v, productos: v.productos.filter((_, n) => n !== i) }))}>
+                      Quitar
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <strong className="form-total">Total: {money(total)}</strong>
+              <div className="confirm-actions">
+                <button type="button" className="button-secondary" onClick={() => setFormOpen(false)}>
+                  Cancelar
+                </button>
+                <button className="button-primary" disabled={!form.productos.length}>
+                  {editing ? "Revisar cambios" : "Revisar pedido"}
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
+      )}
+
+      {detail && (
+        <div className="modal-backdrop">
+          <section className="order-form-modal detail-modal" role="dialog" aria-modal="true">
+            <h2>Pedido #{detail.id}</h2>
+            <dl>
+              <dt>Cliente</dt>
+              <dd>{detail.cliente}</dd>
+              <dt>Fecha</dt>
+              <dd>{new Date(detail.fecha).toLocaleString("es-CR")}</dd>
+              <dt>Estado</dt>
+              <dd>{detail.estado}</dd>
+              <dt>Productos</dt>
+              <dd>
+                {detail.productos.map((p) => (
+                  <div key={`${p.productoId}-${p.nombre}`}>
+                    {p.cantidad} × {p.nombre} — {money(p.subtotal)}
+                  </div>
+                ))}
+              </dd>
+              <dt>Total</dt>
+              <dd>{money(detail.total)}</dd>
+            </dl>
+            <div className="confirm-actions">
+              <button className="button-primary" onClick={() => setDetail(null)}>
+                Cerrar
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
+
+      <ConfirmModal open={Boolean(confirm)} {...confirm} busy={busy} onCancel={() => setConfirm(null)} onConfirm={perform} />
+      {trackingOrder && <OrderTracking order={trackingOrder} onClose={() => setTrackingOrder(null)} />}
+      {invoiceOrder && <OrderInvoice order={invoiceOrder} onClose={() => setInvoiceOrder(null)} />}
+      {expressOrder && (
+        <ExpressEditor
+          order={expressOrder}
+          onClose={() => setExpressOrder(null)}
+          onSaved={() => {
+            setNotice("Datos del express actualizados.");
+            load();
+          }}
+        />
+      )}
+    </main>
+  );
 }
+
 export default Pedidos;
