@@ -73,9 +73,9 @@
     },
     {
       "id": 2,
-      "nombre": "Empleado 1",
-      "email": "empleado@sweetstock.com",
-      "password": "empleado123",
+      "nombre": "Usuario 1",
+      "email": "usuario1@sweetstock.com",
+      "password": "usuario123",
       "rol": "user"
     }
   ]

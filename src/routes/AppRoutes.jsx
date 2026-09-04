@@ -1,20 +1,38 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
+import Home from "../pages/Home/Home";
+import Dashboard from "../pages/Dashboard/Dashboard";
 import Productos from "../pages/Productos/Productos";
 import Categorias from "../pages/Categorias/Categorias";
+
+import ProtectedRoute from "./ProtectedRoute";
 
 function AppRoutes() {
   return (
     <Routes>
+
+      {/* Ruta pública */}
       <Route path="/login" element={<Login />} />
 
-      <Route path="/" element={<Home />} />
+      {/* Rutas para usuarios autenticados */}
+      <Route element={<ProtectedRoute allowedRoles={["admin", "user"]} />}>
+        <Route path="/home" element={<Home />} />
+        <Route path="/productos" element={<Productos />} />
+      </Route>
 
-      <Route path="/productos" element={<Productos />} />
+      {/* Rutas exclusivas del administrador */}
+      <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/categorias" element={<Categorias />} />
+      </Route>
 
-      <Route path="/categorias" element={<Categorias />} />
+      {/* Ruta inicial */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+
+      {/* Rutas inexistentes */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+
     </Routes>
   );
 }
