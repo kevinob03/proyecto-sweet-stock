@@ -28,7 +28,12 @@ function Login() {
       }
 
       login(usuario);
-      navigate("/inicio");
+
+      if (usuario.rol === "admin") {
+        navigate("/dashboard");
+      } else if (usuario.rol === "user") {
+        navigate("/home");
+      }
     } catch (error) {
       setError("No se pudo conectar con el servidor.");
     } finally {
@@ -39,7 +44,6 @@ function Login() {
   return (
     <main className="login-page">
       <section className="login-card">
-
         <div className="login-header">
           <div className="login-logo">SS</div>
 
@@ -49,7 +53,6 @@ function Login() {
         </div>
 
         <form className="login-form" onSubmit={handleSubmit}>
-
           <div className="form-group">
             <label htmlFor="email">
               Correo electrónico
@@ -93,7 +96,6 @@ function Login() {
           >
             {cargando ? "Ingresando..." : "Ingresar"}
           </button>
-
         </form>
 
         <div className="login-credentials">
@@ -106,12 +108,11 @@ function Login() {
           </div>
 
           <div className="credential">
-            <strong>Empleado</strong>
-            <span>empleado@sweetstock.com</span>
-            <span>Contraseña: empleado123</span>
+            <strong>Usuario</strong>
+            <span>usuario1@sweetstock.com</span>
+            <span>Contraseña: usuario123</span>
           </div>
         </div>
-
       </section>
     </main>
   );
