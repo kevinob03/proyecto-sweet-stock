@@ -1,10 +1,15 @@
 const API_URL = "/api";
 
 const request = async (endpoint, options = {}) => {
-  const response = await fetch(`${API_URL}${endpoint}`, options);
+  const token = localStorage.getItem("sweetStockToken");
+  const response = await fetch(`${API_URL}${endpoint}`, {
+    ...options,
+    headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers },
+  });
 
   if (!response.ok) {
-    throw new Error("Error en la solicitud");
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.message || "Error en la solicitud");
   }
 
   if (response.status === 204) {

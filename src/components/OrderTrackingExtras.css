@@ -1,0 +1,57 @@
+.route-note {
+  position: absolute;
+  z-index: 2;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.45rem 0.65rem;
+  background: #fff;
+  color: #715b54;
+  border-radius: 7px;
+  box-shadow: 0 2px 10px #0002;
+  font-size: 0.75rem;
+}
+
+.express-card {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(110px, 1fr));
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: #fff;
+  border-bottom: 1px solid #efd9ce;
+}
+
+.express-card div { display: flex; flex-direction: column; gap: 0.25rem; }
+.express-card span { color: #8a7169; font-size: 0.72rem; text-transform: uppercase; }
+.express-card strong { color: #5a3e36; font-size: 0.9rem; }
+
+.tracking-location-notice {
+  position: absolute;
+  z-index: 2;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.94);
+  color: #715b54;
+  border-radius: 9px;
+  box-shadow: 0 3px 14px #0002;
+}
+
+.tracking-location-notice p { margin: 0.25rem 0 0; }
+
+.tracking-modal header .location-share {
+  margin-top: 0.7rem;
+  padding: 0.55rem 0.75rem;
+  color: #fff;
+  background: #477a56;
+  border: 0;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.tracking-modal header .location-share.active { background: #a53d3d; }
+
+@media (max-width: 800px) {
+  .express-card { grid-template-columns: repeat(2, 1fr); }
+}

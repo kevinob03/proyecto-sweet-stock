@@ -89,20 +89,64 @@
   ],
   "pedidos": [
     {
+      "id": "1",
       "usuarioId": "2",
-      "fecha": "2026-09-04T20:41:22.065Z",
-      "estado": "pendiente",
-      "items": [
+      "cliente": "Usuario 1",
+      "direccionEntrega": "barranca",
+      "contacto": "26602020",
+      "metodoPago": "Transferencia",
+      "estadoPago": "Pendiente",
+      "productos": [
         {
-          "productoId": "2",
-          "nombre": "Cupcakes de Vainilla",
-          "precio": 18.5,
-          "cantidad": 1
+          "productoId": "1",
+          "nombre": "Pastel de Chocolate",
+          "cantidad": 1,
+          "precio": 25.99,
+          "subtotal": 25.99
         }
       ],
-      "total": 18.5,
-      "id": "FWSQfNdn62c"
+      "subtotal": 25.99,
+      "impuestos": 0,
+      "descuento": 0,
+      "total": 25.99,
+      "estado": "En tránsito",
+      "fecha": "2026-09-04T20:31:10.501Z",
+      "tracking": {
+        "express": {
+          "nombre": "Arsenio Romero",
+          "placa": "007",
+          "vehiculo": "yz miedo",
+          "marca": "freedom",
+          "calificacion": 0.4
+        },
+        "origen": {
+          "lat": 9.981469,
+          "lng": -84.757111,
+          "nombre": "Mi ubicación actual como origen"
+        },
+        "destino": {
+          "lat": 9.980672,
+          "lng": -84.736019,
+          "nombre": "El Roble, Puntarenas, 60115, Costa Rica"
+        },
+        "ubicacionActual": {
+          "lat": 9.981359,
+          "lng": -84.757284,
+          "nombre": "Ubicación en vivo del dispositivo",
+          "precision": 35,
+          "actualizadaEn": "2026-09-04T20:58:31.493Z"
+        },
+        "ruta": []
+      }
     }
   ],
+  "businessInfo": {
+    "nombre": "Sweet Stock",
+    "horario": "Lunes a sábado, de 9:00 a. m. a 6:00 p. m.",
+    "ubicacion": "Consulta la dirección exacta con el personal del local.",
+    "direccion": "",
+    "contacto": "",
+    "identificacionFiscal": ""
+  },
   "$schema": "./node_modules/json-server/schema.json"
 }
