@@ -44,6 +44,15 @@
       "stock": 50,
       "categoriaId": 2,
       "imagen": ""
+    },
+     {
+      "id": 5,
+      "nombre": "Brownies",
+      "descripcion": "Brownies de chocolate blanco (unidad)",
+      "precio": 4.50,
+      "stock": 0,
+      "categoriaId": 2,
+      "imagen": ""
     }
   ],
   "categorias": [
