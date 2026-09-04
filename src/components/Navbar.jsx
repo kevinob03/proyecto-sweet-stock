@@ -21,7 +21,10 @@ function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
 
-        <Link to="/inicio" className="navbar-brand">
+       <Link
+          to={usuario.rol === "admin" ? "/dashboard" : "/home"}
+          className="navbar-brand"
+        >
           <img
             src={logo}
             alt="Sweet Stock"
