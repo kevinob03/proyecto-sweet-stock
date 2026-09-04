@@ -19,3 +19,9 @@ export const createPedido = async (pedido) => {
 export const updatePedido = async (id, pedido) => {
   return await api.patch(`/pedidos/${id}`, pedido);
 };
+
+export const deletePedido = async (id) => {
+  return await api.delete(`/pedidos/${id}`);
+};
+
+export const getBusinessInfo = async () => api.get("/business-info");

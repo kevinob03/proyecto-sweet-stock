@@ -20,21 +20,21 @@ function Login() {
     setCargando(true);
 
     try {
-      const usuario = await loginUser(email, password);
+      const { usuario, token } = await loginUser(email, password);
 
       if (!usuario) {
         setError("Correo o contraseña incorrectos.");
         return;
       }
 
-      login(usuario);
+      login(usuario, token);
 
       if (usuario.rol === "admin") {
         navigate("/dashboard");
       } else if (usuario.rol === "user") {
         navigate("/home");
       }
-    } catch (error) {
+    } catch {
       setError("No se pudo conectar con el servidor.");
     } finally {
       setCargando(false);

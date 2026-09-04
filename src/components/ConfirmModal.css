@@ -1,0 +1,10 @@
+.modal-backdrop { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 1rem; background: rgba(52, 35, 30, .55); }
+.confirm-modal { width: min(480px, 100%); padding: 1.5rem; background: #fff; border-radius: 16px; box-shadow: 0 24px 60px rgba(52,35,30,.25); border-top: 5px solid #c9795d; }
+.confirm-modal--danger { border-color: #b43d3d; }
+.confirm-modal--warning { border-color: #d39332; }
+.confirm-modal h2 { margin: 0 0 .75rem; color: #5a3e36; font-family: Georgia, serif; }
+.confirm-modal p { color: #715b54; line-height: 1.5; }
+.confirm-details { margin-top: 1rem; padding: 1rem; border-radius: 10px; background: #fff8f0; color: #5a3e36; white-space: pre-line; line-height: 1.55; }
+.confirm-actions { display: flex; justify-content: flex-end; gap: .75rem; margin-top: 1.5rem; }
+.button-primary, .button-secondary { padding: .7rem 1rem; border-radius: 9px; border: 1px solid transparent; font-weight: 700; }
+.button-primary { color: white; background: #b9684e; }.button-secondary { color: #6f554d; background: white; border-color: #dfc9bf; }.button-danger { background: #b43d3d; }.button-warning { background: #ad6d13; }

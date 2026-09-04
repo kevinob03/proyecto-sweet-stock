@@ -1,0 +1,7 @@
+@media (min-width: 801px) {
+  .status-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.row-actions { flex-wrap: wrap; min-width: 250px; }
+.row-actions .advance-action { color: #fff; background: #477a56; border-color: #477a56; }
+.row-actions button:disabled { cursor: not-allowed; opacity: 0.45; }

@@ -2,7 +2,8 @@ import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
-const USUARIO_STORAGE_KEY = "usuario";
+const USUARIO_STORAGE_KEY = "sweetStockUser";
+const TOKEN_STORAGE_KEY = "sweetStockToken";
 
 function leerUsuarioDeStorage() {
   const valor = localStorage.getItem(USUARIO_STORAGE_KEY);
@@ -17,14 +18,17 @@ function leerUsuarioDeStorage() {
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(leerUsuarioDeStorage);
 
-  const login = (usuario) => {
+  const login = (usuario, token) => {
     setUsuario(usuario);
     localStorage.setItem(USUARIO_STORAGE_KEY, JSON.stringify(usuario));
+    localStorage.setItem(TOKEN_STORAGE_KEY, token);
   };
 
   const logout = () => {
     setUsuario(null);
     localStorage.removeItem(USUARIO_STORAGE_KEY);
+    localStorage.removeItem(TOKEN_STORAGE_KEY);
+    sessionStorage.clear();
   };
 
   return (
