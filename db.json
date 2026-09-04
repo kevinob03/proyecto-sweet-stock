@@ -78,5 +78,9 @@
       "password": "usuario123",
       "rol": "user"
     }
-  ]
+  ],
+
+  "pedidos":[]
 }
+
+  
