@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useAuth } from "../../context/AuthContext";
 import { getProductos } from "../../services/productoService";
@@ -33,6 +34,8 @@ const money = (value) =>
 function Pedidos() {
   const { usuario } = useAuth();
   const isAdmin = usuario?.rol === "admin";
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
@@ -74,6 +77,20 @@ function Pedidos() {
   }, [usuario.id, isAdmin]);
 
   useEffect(() => {
+  const productoId = location.state?.productoId;
+
+  if (!productoId || !products.length) return;
+
+  openCreate(productoId);
+
+  navigate("/pedidos", {
+    replace: true,
+    state: null,
+  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [products, location.state]);
+
+  useEffect(() => {
     if (notice) {
       const timer = setTimeout(() => setNotice(""), 3500);
       return () => clearTimeout(timer);
@@ -112,14 +129,26 @@ function Pedidos() {
 
   const esPropio = (o) => isAdmin || String(o.usuarioId) === String(usuario.id);
 
-  const openCreate = () => {
+  const openCreate = (productoId = null) => {
+    const productoSeleccionado =
+      productoId ?? products[0]?.id ?? "";
+
     setEditing(null);
+
     setForm({
       ...emptyForm,
       cliente: isAdmin ? "" : usuario.nombre,
       usuarioId: usuario.id,
-      productos: products[0] ? [{ productoId: products[0].id, cantidad: 1 }] : [],
+      productos: productoSeleccionado
+        ? [
+            {
+              productoId: productoSeleccionado,
+              cantidad: 1,
+            },
+          ]
+        : [],
     });
+
     setFormOpen(true);
   };
 

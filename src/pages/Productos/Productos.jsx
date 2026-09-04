@@ -8,7 +8,6 @@ import {
   deleteProducto,
 } from "../../services/productoService";
 import { getCategorias } from "../../services/categoriaService";
-import { createPedido } from "../../services/pedidoService";
 import "./Productos.css";
 
 const camposVacios = {
@@ -136,30 +135,15 @@ function Productos() {
     }
   };
 
-  const agregarAlPedido = async (producto) => {
-    if (producto.stock === 0) return;
+const agregarAlPedido = (producto) => {
+  if (producto.stock === 0) return;
 
-    try {
-      await createPedido({
-        usuarioId: usuario.id,
-        fecha: new Date().toISOString(),
-        estado: "pendiente",
-        items: [
-          {
-            productoId: producto.id,
-            nombre: producto.nombre,
-            precio: producto.precio,
-            cantidad: 1,
-          },
-        ],
-        total: producto.precio,
-      });
-
-      navigate("/pedidos");
-    } catch {
-      setError("No se pudo crear el pedido. Inténtalo de nuevo.");
-    }
-  };
+  navigate("/pedidos", {
+    state: {
+      productoId: producto.id,
+    },
+  });
+};
 
   if (loading) {
     return <p className="productos-mensaje">Cargando productos...</p>;
@@ -340,14 +324,14 @@ function Productos() {
                     </button>
                   </>
                 ) : (
-                  <button
-                    type="button"
-                    className="btn btn-agregar"
-                    onClick={() => agregarAlPedido(producto)}
-                    disabled={producto.stock === 0}
-                  >
-                    Agregar a pedido
-                  </button>
+                 <button
+                  type="button"
+                  className="btn btn-agregar"
+                  onClick={() => agregarAlPedido(producto)}
+                  disabled={producto.stock === 0}
+                >
+                  Realizar pedido
+                </button>
                 )}
               </div>
             </div>

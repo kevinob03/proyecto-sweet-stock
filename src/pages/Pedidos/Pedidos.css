@@ -257,4 +257,157 @@ th {
 }
 
 .order-form-modal input,
-.order-form-mod
+.order-form-modal select {
+  width: 100%;
+  padding: 0.7rem;
+  color: var(--chocolate);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.order-form-modal input:focus,
+.order-form-modal select:focus {
+  outline: 2px solid rgba(201, 121, 93, 0.25);
+  border-color: var(--terracotta);
+}
+
+.product-lines {
+  margin-top: 1rem;
+}
+
+.line-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.product-line {
+  display: grid;
+  grid-template-columns: 1fr 100px auto;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+
+.product-line select,
+.product-line input {
+  width: 100%;
+}
+
+.form-total {
+  display: block;
+  margin-top: 1rem;
+  color: var(--chocolate);
+  font-size: 1.1rem;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.button-primary,
+.button-secondary {
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.button-primary {
+  color: var(--white);
+  background: var(--terracotta);
+  border: 1px solid var(--terracotta);
+}
+
+.button-primary:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.button-secondary {
+  color: var(--chocolate);
+  background: var(--white);
+  border: 1px solid var(--border);
+}
+
+.modal-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(90, 62, 54, 0.45);
+}
+
+.detail-modal dl {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0.75rem;
+}
+
+.detail-modal dt {
+  color: var(--chocolate);
+  font-weight: 700;
+}
+
+.detail-modal dd {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 800px) {
+  .pedidos-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .pedidos-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .orders-tools {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .orders-tools > input {
+    width: 100%;
+  }
+
+  .product-line {
+    grid-template-columns: 1fr 90px;
+  }
+
+  .product-line button {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 500px) {
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pedidos-header h1 {
+    font-size: 2rem;
+  }
+
+  .order-create {
+    width: 100%;
+  }
+
+  .detail-modal dl {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+}
