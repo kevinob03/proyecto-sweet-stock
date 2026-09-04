@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api } from "../../api/client";
+import { getProductos } from "../../services/productoService";
 import "./Productos.css";
 
 function Productos() {
@@ -7,24 +7,38 @@ function Productos() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.getProductos().then((data) => {
-      setProductos(data);
-      setLoading(false);
-    });
+    getProductos()
+      .then((data) => {
+        setProductos(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   }, []);
 
-  if (loading) return <p>Cargando productos...</p>;
+  if (loading) {
+    return <p>Cargando productos...</p>;
+  }
 
   return (
     <div>
       <h1>Productos</h1>
+
       <div className="productos-grid">
         {productos.map((producto) => (
           <div key={producto.id} className="producto-card">
             <h3>{producto.nombre}</h3>
+
             <p>{producto.descripcion}</p>
-            <p className="precio">${producto.precio.toFixed(2)}</p>
-            <p className="stock">Stock: {producto.stock}</p>
+
+            <p className="precio">
+              ${producto.precio.toFixed(2)}
+            </p>
+
+            <p className="stock">
+              Stock: {producto.stock}
+            </p>
           </div>
         ))}
       </div>
