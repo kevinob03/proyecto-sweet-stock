@@ -76,7 +76,7 @@
       "nombre": "Empleado 1",
       "email": "empleado@sweetstock.com",
       "password": "empleado123",
-      "rol": "empleado"
+      "rol": "user"
     }
   ]
 }
