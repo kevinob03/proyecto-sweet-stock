@@ -1,3 +1,34 @@
+:root {
+  /* Paleta principal */
+  --cream: #fff8f0;
+  --soft-pink: #e8a0a8;
+  --chocolate: #5a3e36;
+  --terracotta: #c9795d;
+  --terracotta-dark: #b96850;
+  --sage: #78927a;
+  --white: #ffffff;
+
+  /* Complementos */
+  --blush: #f8e1df;
+  --border: #f0ddd2;
+  --input-border: #dfc9bf;
+  --input-bg: #fffdfb;
+  --text-secondary: #8a7169;
+  --placeholder: #b6a19a;
+  --error-bg: #fce9e7;
+  --error-text: #a34f46;
+
+  /* Tipografía */
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+
+  /* Superficies */
+  --shadow-card: 0 8px 24px rgba(90, 62, 54, 0.08);
+  --radius-card: 16px;
+  --radius-input: 10px;
+}
+
 * {
   margin: 0;
   padding: 0;
