@@ -1,0 +1,359 @@
+.dashboard-page {
+  min-height: calc(100vh - 78px);
+  padding: 3rem 2rem 4rem;
+  background: #fff8f0;
+}
+
+.dashboard-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* =========================
+   ENCABEZADO
+========================= */
+
+.dashboard-header {
+  margin-bottom: 2.5rem;
+}
+
+.dashboard-label {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  color: #c9795d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  color: #5a3e36;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.7rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.dashboard-header p {
+  margin-top: 0.75rem;
+  color: #8a7169;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* =========================
+   TARJETAS PRINCIPALES
+========================= */
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.dashboard-card {
+  min-height: 175px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid #f0ddd2;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(90, 62, 54, 0.07);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(90, 62, 54, 0.1);
+}
+
+.dashboard-card span {
+  color: #8a7169;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.dashboard-card strong {
+  margin: 0.75rem 0;
+  color: #5a3e36;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.dashboard-card p {
+  margin: 0;
+  color: #a18b83;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+/* =========================
+   RESUMEN SECUNDARIO
+========================= */
+
+.dashboard-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-info-card {
+  padding: 1.5rem;
+  background: #fdf3ec;
+  border: 1px solid #f0ddd2;
+  border-radius: 16px;
+}
+
+.dashboard-info-card span {
+  color: #8a7169;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.dashboard-info-card strong {
+  display: block;
+  margin: 0.5rem 0;
+  color: #5a3e36;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.dashboard-info-card p {
+  margin: 0;
+  color: #a18b83;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+/* =========================
+   SECCIÓN DE GRÁFICOS
+========================= */
+
+.dashboard-details {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.dashboard-section {
+  padding: 1.5rem;
+  background: #ffffff;
+  border: 1px solid #f0ddd2;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(90, 62, 54, 0.07);
+}
+
+.dashboard-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dashboard-section-header .dashboard-label {
+  margin-bottom: 0.4rem;
+}
+
+.dashboard-section-header h2 {
+  margin: 0;
+  color: #5a3e36;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.dashboard-section-header > p {
+  margin: 0;
+  color: #a18b83;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+/* =========================
+   GRÁFICOS
+========================= */
+
+.dashboard-chart {
+  width: 100%;
+  min-height: 320px;
+}
+
+.dashboard-pie-chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================
+   ALERTAS
+========================= */
+
+.dashboard-alerts {
+  margin-bottom: 0;
+}
+
+.alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.alert-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  background: #fff8f0;
+  border: 1px solid #f0ddd2;
+  border-radius: 10px;
+}
+
+.alert-item > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.alert-item strong {
+  color: #5a3e36;
+  font-size: 0.9rem;
+}
+
+.alert-item span {
+  color: #8a7169;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.alert-stock {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.alert-stock strong {
+  color: #c9795d;
+  font-size: 1.25rem;
+}
+
+.alert-stock span {
+  color: #8a7169;
+  font-size: 0.75rem;
+}
+
+.empty-message {
+  margin: 0;
+  padding: 1.5rem;
+  text-align: center;
+  color: #8a7169;
+  background: #fff8f0;
+  border-radius: 10px;
+}
+
+/* =========================
+   PRODUCTOS AGOTADOS
+========================= */
+
+.out-of-stock {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #f0ddd2;
+}
+
+.out-of-stock h3 {
+  margin: 0 0 0.75rem;
+  color: #5a3e36;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.out-of-stock .alert-item {
+  margin-bottom: 0.5rem;
+}
+
+/* =========================
+   ESTADOS
+========================= */
+
+.dashboard-status {
+  padding: 2rem;
+  text-align: center;
+  color: #8a7169;
+}
+
+.dashboard-error {
+  padding: 1rem 1.25rem;
+  background: #fce9e7;
+  border: 1px solid #e8a0a8;
+  border-radius: 10px;
+  color: #a34f46;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1050px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-details {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .dashboard-page {
+    min-height: calc(100vh - 130px);
+    padding: 2rem 1rem 3rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-section {
+    padding: 1.25rem;
+  }
+
+  .dashboard-section-header {
+    flex-direction: column;
+  }
+
+  .dashboard-section-header > p {
+    white-space: normal;
+  }
+
+  .alert-item {
+    align-items: flex-start;
+  }
+
+  .alert-stock {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.1rem;
+  }
+}

@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Navbar.css";
+import logo from "../assets/sweetstock-logo.png";
 
 function Navbar() {
   const { usuario, logout } = useAuth();
@@ -20,8 +21,12 @@ function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
 
-        <Link to="/" className="navbar-brand">
-          <span className="navbar-logo">SS</span>
+        <Link to="/inicio" className="navbar-brand">
+          <img
+            src={logo}
+            alt="Sweet Stock"
+            className="navbar-logo"
+          />
 
           <span className="navbar-name">
             Sweet Stock
