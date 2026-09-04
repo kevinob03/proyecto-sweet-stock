@@ -1,0 +1,395 @@
+.home-page {
+  min-height: calc(100vh - 78px);
+  padding: 1rem 2rem 2rem;
+  background: #fff8f0;
+}
+
+.home-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* =========================
+   ENCABEZADO
+========================= */
+
+.home-header {
+  margin-bottom: 2.5rem;
+}
+
+.home-label {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  color: #c9795d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.home-header h1 {
+  margin: 0;
+  color: #5a3e36;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.7rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.home-header p {
+  max-width: 600px;
+  margin-top: 0.75rem;
+  color: #8a7169;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+
+/* =========================
+   TARJETAS DE RESUMEN
+========================= */
+
+.home-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.home-summary-card {
+  min-height: 175px;
+  padding: 1.5rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background: #ffffff;
+  border: 1px solid #f0ddd2;
+  border-radius: 16px;
+
+  box-shadow: 0 8px 24px rgba(90, 62, 54, 0.07);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.home-summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(90, 62, 54, 0.1);
+}
+
+.home-summary-card span {
+  color: #8a7169;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.home-summary-card strong {
+  margin: 0.75rem 0;
+
+  color: #5a3e36;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.home-summary-card p {
+  margin: 0;
+
+  color: #a18b83;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+
+/* =========================
+   ESTADO GENERAL
+========================= */
+
+.home-status-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+
+  margin-top: 1.25rem;
+  padding: 1.75rem 2rem;
+
+  background: #fdf3ec;
+  border: 1px solid #f0ddd2;
+  border-radius: 16px;
+}
+
+.home-status-content {
+  flex: 1;
+}
+
+.home-status-content h2 {
+  margin: 0.25rem 0 0.5rem;
+
+  color: #5a3e36;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.home-status-content p {
+  margin: 0;
+
+  color: #8a7169;
+  font-size: 0.85rem;
+}
+
+.home-status-detail {
+  min-width: 150px;
+  padding-left: 2rem;
+
+  border-left: 1px solid #ead3c7;
+}
+
+.home-status-detail span {
+  display: block;
+  margin-bottom: 0.35rem;
+
+  color: #8a7169;
+  font-size: 0.78rem;
+}
+
+.home-status-detail strong {
+  color: #5a3e36;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.8rem;
+}
+
+
+/* =========================
+   SECCIÓN INFERIOR
+========================= */
+
+.home-lower-section {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1.25rem;
+
+  margin-top: 1.25rem;
+}
+
+.home-activity,
+.home-brand-card {
+  padding: 1.5rem;
+
+  background: #ffffff;
+  border: 1px solid #f0ddd2;
+  border-radius: 16px;
+
+  box-shadow: 0 8px 24px rgba(90, 62, 54, 0.07);
+}
+
+
+/* =========================
+   ENCABEZADO DE SECCIÓN
+========================= */
+
+.home-section-header {
+  margin-bottom: 1rem;
+}
+
+.home-section-header .home-label {
+  margin-bottom: 0.4rem;
+}
+
+.home-section-header h2 {
+  margin: 0;
+
+  color: #5a3e36;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+
+/* =========================
+   ACTIVIDAD RECIENTE
+========================= */
+
+.home-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.home-activity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding: 0.9rem 1rem;
+
+  background: #fff8f0;
+  border: 1px solid #f0ddd2;
+  border-radius: 10px;
+}
+
+.home-activity-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.home-activity-item strong {
+  color: #5a3e36;
+  font-size: 0.88rem;
+}
+
+.home-activity-item span {
+  color: #8a7169;
+  font-size: 0.75rem;
+}
+
+
+/* =========================
+   ESTADO DEL PEDIDO
+========================= */
+
+.home-order-status {
+  padding: 0.35rem 0.65rem;
+
+  border-radius: 999px;
+
+  background: #fdf3ec;
+  color: #c9795d !important;
+
+  font-size: 0.7rem !important;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+
+/* =========================
+   SIN ACTIVIDAD
+========================= */
+
+.home-empty {
+  margin: 0;
+  padding: 1.5rem;
+
+  text-align: center;
+
+  color: #8a7169;
+  background: #fff8f0;
+  border-radius: 10px;
+}
+
+
+/* =========================
+   PRESENTACIÓN SWEET STOCK
+========================= */
+
+.home-brand-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+
+  background: #fdf3ec;
+}
+
+.home-brand-logo {
+  width: 110px;
+  height: 110px;
+
+  flex-shrink: 0;
+
+  object-fit: contain;
+}
+
+.home-brand-card h2 {
+  margin: 0.25rem 0 0.5rem;
+
+  color: #5a3e36;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.home-brand-card p {
+  margin: 0;
+
+  color: #8a7169;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+
+/* =========================
+   CARGANDO
+========================= */
+
+.home-status {
+  padding: 2rem;
+
+  text-align: center;
+
+  color: #8a7169;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .home-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .home-lower-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-page {
+    min-height: calc(100vh - 130px);
+    padding: 2rem 1rem 3rem;
+  }
+
+  .home-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .home-summary-card {
+    min-height: 150px;
+  }
+
+  .home-status-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .home-status-detail {
+    width: 100%;
+    min-width: 0;
+
+    padding-left: 0;
+    padding-top: 1rem;
+
+    border-left: none;
+    border-top: 1px solid #ead3c7;
+  }
+
+  .home-brand-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .home-brand-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .home-activity-item {
+    align-items: flex-start;
+  }
+}
