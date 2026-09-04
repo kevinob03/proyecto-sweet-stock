@@ -1,72 +1,51 @@
 const API_URL = "/api";
 
-export const api = {
-  getProductos: async () => {
-    const res = await fetch(`${API_URL}/productos`);
-    return res.json();
-  },
+const request = async (endpoint, options = {}) => {
+  const response = await fetch(`${API_URL}${endpoint}`, options);
 
-  getProductoById: async (id) => {
-    const res = await fetch(`${API_URL}/productos/${id}`);
-    return res.json();
-  },
-
-  createProducto: async (producto) => {
-    const res = await fetch(`${API_URL}/productos`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(producto),
-    });
-    return res.json();
-  },
-
-  updateProducto: async (id, producto) => {
-    const res = await fetch(`${API_URL}/productos/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(producto),
-    });
-    return res.json();
-  },
-
-  deleteProducto: async (id) => {
-    await fetch(`${API_URL}/productos/${id}`, { method: "DELETE" });
-  },
-
-  getCategorias: async () => {
-    const res = await fetch(`${API_URL}/categorias`);
-    return res.json();
-  },
-
-  createCategoria: async (categoria) => {
-    const res = await fetch(`${API_URL}/categorias`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(categoria),
-    });
-    return res.json();
-  },
-
-  deleteCategoria: async (id) => {
-    await fetch(`${API_URL}/categorias/${id}`, { method: "DELETE" });
-  },
-
-  getUsuarios: async () => {
-    const res = await fetch(`${API_URL}/usuarios`);
-    return res.json();
-  },
-
-login: async (email, password) => {
-  const res = await fetch(
-    `${API_URL}/usuarios?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
-  );
-
-  if (!res.ok) {
-    throw new Error("Error al consultar los usuarios");
+  if (!response.ok) {
+    throw new Error("Error en la solicitud");
   }
 
-  const data = await res.json();
+  if (response.status === 204) {
+    return null;
+  }
 
-  return data[0] || null;
-},
+  return response.json();
+};
+
+export const api = {
+  get: (endpoint) => request(endpoint),
+
+  post: (endpoint, data) =>
+    request(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }),
+
+  put: (endpoint, data) =>
+    request(endpoint, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }),
+
+  patch: (endpoint, data) =>
+    request(endpoint, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }),
+
+  delete: (endpoint) =>
+    request(endpoint, {
+      method: "DELETE",
+    }),
 };
