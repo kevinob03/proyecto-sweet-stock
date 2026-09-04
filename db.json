@@ -1,0 +1,82 @@
+{
+  "productos": [
+    {
+      "id": 1,
+      "nombre": "Pastel de Chocolate",
+      "descripcion": "Delicioso pastel de chocolate con ganache",
+      "precio": 25.99,
+      "stock": 15,
+      "categoriaId": 1,
+      "imagen": ""
+    },
+    {
+      "id": 2,
+      "nombre": "Cupcakes de Vainilla",
+      "descripcion": "Docena de cupcakes de vainilla con frosting",
+      "precio": 18.50,
+      "stock": 25,
+      "categoriaId": 1,
+      "imagen": ""
+    },
+    {
+      "id": 3,
+      "nombre": "Torta Red Velvet",
+      "descripcion": "Torta red velvet con frosting de queso crema",
+      "precio": 32.00,
+      "stock": 10,
+      "categoriaId": 1,
+      "imagen": ""
+    },
+    {
+      "id": 4,
+      "nombre": "Galletas de Avena",
+      "descripcion": "Pack de 12 galletas de avena con miel",
+      "precio": 8.99,
+      "stock": 40,
+      "categoriaId": 2,
+      "imagen": ""
+    },
+    {
+      "id": 5,
+      "nombre": "Brownies",
+      "descripcion": "Brownies de chocolate belga (unidad)",
+      "precio": 4.50,
+      "stock": 50,
+      "categoriaId": 2,
+      "imagen": ""
+    }
+  ],
+  "categorias": [
+    {
+      "id": 1,
+      "nombre": "Pasteles",
+      "descripcion": "Pasteles y tortas para toda ocasión"
+    },
+    {
+      "id": 2,
+      "nombre": "Galletas y Pastelería",
+      "descripcion": "Galletas, brownies y repostería variada"
+    },
+    {
+      "id": 3,
+      "nombre": "Bebidas",
+      "descripcion": "Bebidas y refrescos"
+    }
+  ],
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Admin",
+      "email": "admin@sweetstock.com",
+      "password": "admin123",
+      "rol": "admin"
+    },
+    {
+      "id": 2,
+      "nombre": "Empleado 1",
+      "email": "empleado@sweetstock.com",
+      "password": "empleado123",
+      "rol": "empleado"
+    }
+  ]
+}
