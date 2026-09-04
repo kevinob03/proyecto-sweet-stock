@@ -21,10 +21,7 @@ function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
 
-       <Link
-          to={usuario.rol === "admin" ? "/dashboard" : "/home"}
-          className="navbar-brand"
-        >
+       <Link to="/home" className="navbar-brand">
           <img
             src={logo}
             alt="Sweet Stock"
@@ -38,6 +35,17 @@ function Navbar() {
 
         <div className="navbar-links">
 
+          <Link
+            to="/home"
+            className={
+              location.pathname === "/home"
+                ? "active"
+                : ""
+            }
+          >
+            Inicio
+          </Link>
+
           {usuario.rol === "admin" && (
             <Link
               to="/dashboard"
@@ -50,17 +58,6 @@ function Navbar() {
               Dashboard
             </Link>
           )}
-
-          <Link
-            to="/home"
-            className={
-              location.pathname === "/home"
-                ? "active"
-                : ""
-            }
-          >
-            Inicio
-          </Link>
 
           <Link
             to="/productos"
