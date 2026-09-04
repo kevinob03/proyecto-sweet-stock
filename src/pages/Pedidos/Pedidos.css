@@ -1,0 +1,56 @@
+.pedidos-page {
+  min-height: 100vh;
+  padding: 2.5rem;
+  background: #fff8f0;
+}
+
+.pedidos-header {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+}
+
+.pedidos-label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  color: #c9795d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.pedidos-header h1 {
+  margin: 0;
+  color: #5a3e36;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.5rem;
+}
+
+.pedidos-header p {
+  margin-top: 0.5rem;
+  color: #8a7169;
+  font-size: 1rem;
+}
+
+.pedidos-empty {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+
+  background: #ffffff;
+  border: 1px solid #f0ddd2;
+  border-radius: 16px;
+
+  text-align: center;
+
+  box-shadow: 0 8px 24px rgba(90, 62, 54, 0.08);
+}
+
+.pedidos-empty h2 {
+  margin-bottom: 0.5rem;
+  color: #5a3e36;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.pedidos-empty p {
+  color: #8a7169;
+}
