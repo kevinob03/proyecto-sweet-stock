@@ -9,7 +9,7 @@ function ProtectedRoute({ allowedRoles }) {
   }
 
   if (!allowedRoles.includes(usuario.rol)) {
-    return <Navigate to="/home" replace />;
+    return <Navigate to="/acceso-denegado" replace />;
   }
 
   return <Outlet />;
