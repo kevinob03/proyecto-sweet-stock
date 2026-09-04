@@ -1,7 +1,7 @@
 {
   "productos": [
     {
-      "id": 1,
+      "id": "1",
       "nombre": "Pastel de Chocolate",
       "descripcion": "Delicioso pastel de chocolate con ganache",
       "precio": 25.99,
@@ -10,25 +10,24 @@
       "imagen": ""
     },
     {
-      "id": 2,
+      "id": "2",
       "nombre": "Cupcakes de Vainilla",
       "descripcion": "Docena de cupcakes de vainilla con frosting",
-      "precio": 18.50,
+      "precio": 18.5,
       "stock": 25,
       "categoriaId": 1,
       "imagen": ""
     },
     {
-      "id": 3,
       "nombre": "Torta Red Velvet",
       "descripcion": "Torta red velvet con frosting de queso crema",
-      "precio": 32.00,
+      "precio": 32,
       "stock": 10,
       "categoriaId": 1,
-      "imagen": ""
+      "id": "3"
     },
     {
-      "id": 4,
+      "id": "4",
       "nombre": "Galletas de Avena",
       "descripcion": "Pack de 12 galletas de avena con miel",
       "precio": 8.99,
@@ -37,46 +36,73 @@
       "imagen": ""
     },
     {
-      "id": 5,
+      "id": "5",
       "nombre": "Brownies",
       "descripcion": "Brownies de chocolate belga (unidad)",
-      "precio": 4.50,
+      "precio": 4.5,
       "stock": 50,
+      "categoriaId": 2,
+      "imagen": ""
+    },
+    {
+      "id": "6",
+      "nombre": "Brownies",
+      "descripcion": "Brownies de chocolate blanco (unidad)",
+      "precio": 4.5,
+      "stock": 0,
       "categoriaId": 2,
       "imagen": ""
     }
   ],
   "categorias": [
     {
-      "id": 1,
+      "id": "1",
       "nombre": "Pasteles",
       "descripcion": "Pasteles y tortas para toda ocasión"
     },
     {
-      "id": 2,
+      "id": "2",
       "nombre": "Galletas y Pastelería",
       "descripcion": "Galletas, brownies y repostería variada"
     },
     {
-      "id": 3,
+      "id": "3",
       "nombre": "Bebidas",
       "descripcion": "Bebidas y refrescos"
     }
   ],
   "usuarios": [
     {
-      "id": 1,
+      "id": "1",
       "nombre": "Admin",
       "email": "admin@sweetstock.com",
       "password": "admin123",
       "rol": "admin"
     },
     {
-      "id": 2,
+      "id": "2",
       "nombre": "Usuario 1",
       "email": "usuario1@sweetstock.com",
       "password": "usuario123",
       "rol": "user"
     }
-  ]
+  ],
+  "pedidos": [
+    {
+      "usuarioId": "2",
+      "fecha": "2026-09-04T20:41:22.065Z",
+      "estado": "pendiente",
+      "items": [
+        {
+          "productoId": "2",
+          "nombre": "Cupcakes de Vainilla",
+          "precio": 18.5,
+          "cantidad": 1
+        }
+      ],
+      "total": 18.5,
+      "id": "FWSQfNdn62c"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
